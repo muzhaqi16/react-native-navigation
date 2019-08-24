@@ -5,8 +5,8 @@ export default class LogoTitle extends React.Component {
     render() {
         return (
             <Image
-                source={require('../../test.png')}
-                style={{ width: 30, height: 30 }}
+                source={require('../../logo.png')}
+                style={{ width: 60, height: 47, marginLeft: 20 }}
             />
         );
     }
