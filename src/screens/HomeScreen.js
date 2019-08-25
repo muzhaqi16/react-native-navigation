@@ -17,7 +17,11 @@ export default class HomeScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { isLoading: true }
+        this.state = {
+            isLoading: true,
+            hasError: false,
+            errorMessage: 'There was an error with the app'
+        }
     }
 
     componentDidMount() {
@@ -25,19 +29,27 @@ export default class HomeScreen extends React.Component {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NjY2ODU3MzksImV4cCI6MTU2NjY5NjUzOSwic3ViIjoidGVzdCJ9.dFQtIKMtZRh8rsi3lS1_eJkOA60pUrQg-S1n_sIf_yo`
+                'Authorization': `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NjY3NTY2NDYsImV4cCI6MTU2Njc2NzQ0Niwic3ViIjoidGVzdCJ9.8y_E1TUE8Jh7iZuB0W6bCtsA9DhkUgfiKmT_74xmoBw`
             }
         })
-            .then((response) => response.json())
+            .then((res) => {
+                if (!res.ok) {
+                    return res.json().then(error => Promise.reject(error))
+                }
+                return res.json()
+            })
             .then((res) => {
                 this.setState({
                     isLoading: false,
                     groceries: res,
                 });
-
             })
             .catch((error) => {
-                console.error(error);
+                this.setState({
+                    isLoading: false,
+                    hasError: true,
+                    errorMessage: error.error
+                })
             });
     }
 
@@ -50,16 +62,21 @@ export default class HomeScreen extends React.Component {
                 </View>
             )
         }
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                {<FlatList
+        let listView = <Text>{this.state.errorMessage}</Text>
+        if (!this.state.isLoading && !this.state.hasError) {
+            listView =
+                <FlatList
                     data={this.state.groceries}
                     renderItem={({ item }) => <Text>
                         <Image source={{ uri: "https://spoonacular.com/cdn/ingredients_100x100/" + item.image, width: 100, height: 100 }} />
                         {item.name}, {item.category}</Text>
                     }
-                    keyExtractor={item => item.id.toString()}
-                />}
+                    keyExtractor={(item, index) => item.id.toString()}
+                />
+        }
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                {listView}
                 <Text>Home Screen</Text>
                 <Button
                     title="Go to Details"
