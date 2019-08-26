@@ -24,7 +24,7 @@ class CheckBox extends Component {
                 iconStyle={{ marginLeft: -10, marginRight: 0 }}
                 activeOpacity={1}
                 borderRadius={5}
-                onPress={() => alert(this.state.data)}
+                onPress={() => alert(this.state.data.id)}
             >
             </Icon.Button>
         );
