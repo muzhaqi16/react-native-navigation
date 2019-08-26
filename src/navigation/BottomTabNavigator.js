@@ -1,15 +1,22 @@
-import React from 'react'
 import { createBottomTabNavigator } from 'react-navigation';
+import getTabBarIcon from '../components/getTabBarIcon';
 
 import HomeStack from './HomeStack';
 import AuthenticationStack from './AuthenticationStack';
+import ShopingListStack from './ShoppingListStack';
 
 export default BottomTabNavigator = createBottomTabNavigator({
-    /* 
-     * Rather than being rendered by a screen component, the
-     * AuthenticationNavigator is a screen component
-     */
-
     Home: HomeStack,
-    Auth: AuthenticationStack,
-});
+    'Search Recipe': AuthenticationStack,
+    'Shopping List': ShopingListStack
+},
+    {
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused, tintColor }) =>
+                getTabBarIcon(navigation, focused, tintColor),
+        }),
+        tabBarOptions: {
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+        },
+    });

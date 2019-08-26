@@ -1,18 +1,23 @@
 import React from 'react'
 import { Button, View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
 import LogoTitle from '../components/LogoTitle';
+import MenuButton from '../components/MenuButton';
+
 import config from '../../config'
 
 export default class HomeScreen extends React.Component {
-    static navigationOptions = {
-        headerTitle: <LogoTitle />,
-        headerRight: (
-            <Button
-                onPress={() => alert('This is a button!')}
-                title="Info"
-            />
-        ),
-        title: 'Home',
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+            headerTitle: <LogoTitle />,
+            // headerRight: (
+            //     <Button
+            //         onPress={() => alert('This is a button!')}
+            //         title="Info"
+            //     />
+            // ),
+            title: 'Home',
+        }
     };
 
     constructor(props) {
@@ -29,7 +34,7 @@ export default class HomeScreen extends React.Component {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NjY3NTY2NDYsImV4cCI6MTU2Njc2NzQ0Niwic3ViIjoidGVzdCJ9.8y_E1TUE8Jh7iZuB0W6bCtsA9DhkUgfiKmT_74xmoBw`
+                'Authorization': `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NjY3NzEwMzIsImV4cCI6MTU2Njc4MTgzMiwic3ViIjoidGVzdCJ9.4K1UUCgKRzVgCM6NVjXyGoR2atRzXdOQsfavxVghxCc`
             }
         })
             .then((res) => {
