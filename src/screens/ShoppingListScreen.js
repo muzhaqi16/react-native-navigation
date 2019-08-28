@@ -8,50 +8,37 @@ export default class ShopingListScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataList: [
-                { id: 1, title: "Dale", completed: true },
-                { id: 2, title: "Easter" },
-                { id: 3, title: "Gil" },
-                { id: 4, title: "Malina" },
-                { id: 5, title: "Galvin" },
-                { id: 6, title: "Martelle" },
-                { id: 7, title: "Lin" },
-                { id: 8, title: "Blythe" },
-                { id: 9, title: "Bartel" },
-                { id: 10, title: "Linnie" },
-                { id: 11, title: "Emilee" },
-                { id: 12, title: "Livy" },
-                { id: 13, title: "Carly" },
-                { id: 14, title: "Eulalie" },
-                { id: 15, title: "Riley" },
-                { id: 16, title: "Erastus" },
-                { id: 17, title: "Carmel" },
-                { id: 18, title: "Ilysa" },
-                { id: 19, title: "Davine" },
-                { id: 20, title: "Gisella" },
-                { title: "Hello World", id: 21 },
-                { title: "To do list", id: 22 }
-            ]
+            dataList: []
         }
     }
     static navigationOptions = {
         title: 'Shoping List',
     };
     handleInput = item => {
-        newItem = { title: item, id: 3 }
+        newItem = { title: item, id: this.state.dataList.length + 1 }
         this.setState({
             dataList: [...this.state.dataList, newItem]
         })
     }
+    handleCheck = id => {
+        //To do 
+        alert('Checked')
+    }
+    handleDelete = id => {
+        this.setState({
+            dataList: this.state.dataList.filter(item => item.id != id)
+        })
+    }
     render() {
-        let listView = (<View><Text>No data</Text></View>);
+        let listView = (<View><Text>Start adding some items first</Text></View>);
         if (this.state.dataList.length) {
             listView = (
                 <FlatList
                     style={{ width: width, padding: 10, marginBottom: 10 }}
                     data={this.state.dataList}
-                    renderItem={({ item }) => <ListViewItem data={item} />
+                    renderItem={({ item }) => <ListViewItem data={item} delete={this.handleDelete} checkItem={this.handleCheck} />
                     }
+
                     keyExtractor={(item, index) => {
                         return item.id.toString()
                     }

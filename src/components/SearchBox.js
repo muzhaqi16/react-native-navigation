@@ -34,7 +34,7 @@ class SearchBox extends Component {
                     borderRadius: 0,
                     marginRight: 4
                 }}
-                    placeholder='Add a todo or Search'
+                    placeholder='Add a shopping item'
                     onChangeText={(text) => this.setState({ text })}
                     value={this.state.text}
                     onSubmitEditing={this.handleAddItem}
