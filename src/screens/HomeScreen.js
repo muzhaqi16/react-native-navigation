@@ -30,7 +30,7 @@ export default class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        return fetch(config.API_ENDPOINT + '/api/groceries', {
+        return fetch(config.API_ENDPOINT + '/groceries', {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
