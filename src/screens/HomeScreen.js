@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import LogoTitle from '../components/LogoTitle';
 import MenuButton from '../components/MenuButton';
@@ -75,9 +75,11 @@ export default class HomeScreen extends React.Component {
     }
 
     render() {
+        const { navigation } = this.props;
         if (this.state.isLoading) {
             return (
                 <View style={{ flex: 1, padding: 20 }}>
+                    <Text>Log in</Text>
                     <ActivityIndicator />
                 </View>
             )
@@ -96,6 +98,7 @@ export default class HomeScreen extends React.Component {
         }
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
+                <Text>Welcome back</Text>
                 {listView}
             </View>
         );

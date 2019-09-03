@@ -13,10 +13,11 @@ export default class SignInScreen extends React.Component {
         this.state = {
             email: "",
             password: "",
-            loggedIn: false,
+            loggedIn: AsyncStorage.getItem('@authToken') ? true : false,
             hasError: false,
             errorMessage: ''
         };
+
     }
     static navigationOptions = {
         title: 'Sign In',
@@ -36,9 +37,7 @@ export default class SignInScreen extends React.Component {
                 errorMessage: e.error
             })
         }
-        this.setState({
-            loggedIn: true
-        })
+        this.props.navigation.navigate('App');
     }
     handleLogin = () => {
         const login = {
@@ -101,7 +100,7 @@ export default class SignInScreen extends React.Component {
                             // remove error
                         }
 
-                        this.setState({ loggedIn: false })
+                        this.props.navigation.navigate('AuthLoading')
                     }} title="Log Out" />
                 </View>
             )
