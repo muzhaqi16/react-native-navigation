@@ -13,7 +13,6 @@ export default class SignInScreen extends React.Component {
         this.state = {
             email: "",
             password: "",
-            loggedIn: AsyncStorage.getItem('@authToken') ? true : false,
             hasError: false,
             errorMessage: ''
         };
@@ -70,41 +69,24 @@ export default class SignInScreen extends React.Component {
             });
     }
     render() {
-        if (!this.state.loggedIn) {
-            return (
-                <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-                    <View style={styles.scrollView}>
-                        <ScrollView style={styles.scrollViewWrapper}>
-                            {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
-                            <EmailInput handleEmailChange={this.handleEmailChange} />
-                            <PasswordInput handlePasswordChange={this.handlePasswordChange} />
-                            <Button
-                                title="Login"
-                                onPress={this.handleLogin}
-                                style={{
-                                    color: 'white', flex: 1
-                                }} />
-                        </ScrollView>
+        return (
+            <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+                <View style={styles.scrollView}>
+                    <ScrollView style={styles.scrollViewWrapper}>
+                        {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
+                        <EmailInput handleEmailChange={this.handleEmailChange} />
+                        <PasswordInput handlePasswordChange={this.handlePasswordChange} />
+                        <Button
+                            title="Login"
+                            onPress={this.handleLogin}
+                            style={{
+                                color: 'white', flex: 1
+                            }} />
+                    </ScrollView>
 
-                    </View>
-                </KeyboardAvoidingView>
-            );
-        } else {
-            return (
-                <View>
-                    <Text>You are already logged in dude</Text>
-                    <Button onPress={async () => {
-                        try {
-                            await AsyncStorage.removeItem('@authToken')
-                        } catch (e) {
-                            // remove error
-                        }
-
-                        this.props.navigation.navigate('AuthLoading')
-                    }} title="Log Out" />
                 </View>
-            )
-        }
+            </KeyboardAvoidingView>
+        );
     }
 }
 const styles = StyleSheet.create({

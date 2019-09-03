@@ -1,5 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from 'react-navigation';
+import { Button } from 'react-native';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import ProfileStack from './ProfileStack'
@@ -17,11 +18,5 @@ export default DrawerNavigator = createDrawerNavigator({
             drawerLabel: 'Profile',
         }
     },
-    LogOut: {
-        screen: SignInScreen,
-        navigationOptions: {
-            drawerLabel: 'Log Out',
-        }
-    }
 
 })
