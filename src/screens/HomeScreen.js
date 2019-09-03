@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import LogoTitle from '../components/LogoTitle';
 import MenuButton from '../components/MenuButton';
 
@@ -24,17 +25,32 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             isLoading: true,
+            authToken: "",
             hasError: false,
             errorMessage: 'There was an error with the app'
         }
     }
-
+    getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@authToken')
+            if (value !== null) {
+                this.setState({ authToken: value })
+                this.fetchData();
+            }
+        } catch (e) {
+            // error reading value
+            alert('There was an error')
+        }
+    }
     componentDidMount() {
+        this.getData();
+    }
+    fetchData() {
         return fetch(config.API_ENDPOINT + '/groceries', {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NjY3NzEwMzIsImV4cCI6MTU2Njc4MTgzMiwic3ViIjoidGVzdCJ9.4K1UUCgKRzVgCM6NVjXyGoR2atRzXdOQsfavxVghxCc`
+                'Authorization': `bearer ${this.state.authToken}`
             }
         })
             .then((res) => {
@@ -58,7 +74,6 @@ export default class HomeScreen extends React.Component {
             });
     }
 
-
     render() {
         if (this.state.isLoading) {
             return (
@@ -80,19 +95,8 @@ export default class HomeScreen extends React.Component {
                 />
         }
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
                 {listView}
-                <Text>Home Screen</Text>
-                <Button
-                    title="Go to Details"
-                    onPress={() => {
-                        /* 1. Navigate to the Details route with params */
-                        this.props.navigation.navigate('Details', {
-                            itemId: 86,
-                            otherParam: 'anything you want here',
-                        });
-                    }}
-                />
             </View>
         );
     }

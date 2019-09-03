@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Button, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import config from '../../config'
 
@@ -12,6 +13,7 @@ export default class SignInScreen extends React.Component {
         this.state = {
             email: "",
             password: "",
+            loggedIn: false,
             hasError: false,
             errorMessage: ''
         };
@@ -25,6 +27,19 @@ export default class SignInScreen extends React.Component {
     handlePasswordChange = password => {
         this.setState({ password: password });
     };
+    storeData = async (authToken) => {
+        try {
+            await AsyncStorage.setItem('@authToken', authToken)
+        } catch (e) {
+            this.setState({
+                hasError: true,
+                errorMessage: e.error
+            })
+        }
+        this.setState({
+            loggedIn: true
+        })
+    }
     handleLogin = () => {
         const login = {
             user_name: this.state.email,
@@ -47,7 +62,7 @@ export default class SignInScreen extends React.Component {
             }
             return res.json()
         })
-            .then(res => alert(res.authToken))
+            .then(res => this.storeData(res.authToken))
             .catch((error) => {
                 this.setState({
                     hasError: true,
@@ -56,24 +71,41 @@ export default class SignInScreen extends React.Component {
             });
     }
     render() {
-        return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-                <View style={styles.scrollView}>
-                    <ScrollView style={styles.scrollViewWrapper}>
-                        {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
-                        <EmailInput handleEmailChange={this.handleEmailChange} />
-                        <PasswordInput handlePasswordChange={this.handlePasswordChange} />
-                        <Button
-                            title="Login"
-                            onPress={this.handleLogin}
-                            style={{
-                                color: 'white', flex: 1
-                            }} />
-                    </ScrollView>
+        if (!this.state.loggedIn) {
+            return (
+                <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+                    <View style={styles.scrollView}>
+                        <ScrollView style={styles.scrollViewWrapper}>
+                            {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
+                            <EmailInput handleEmailChange={this.handleEmailChange} />
+                            <PasswordInput handlePasswordChange={this.handlePasswordChange} />
+                            <Button
+                                title="Login"
+                                onPress={this.handleLogin}
+                                style={{
+                                    color: 'white', flex: 1
+                                }} />
+                        </ScrollView>
 
+                    </View>
+                </KeyboardAvoidingView>
+            );
+        } else {
+            return (
+                <View>
+                    <Text>You are already logged in dude</Text>
+                    <Button onPress={async () => {
+                        try {
+                            await AsyncStorage.removeItem('@authToken')
+                        } catch (e) {
+                            // remove error
+                        }
+
+                        this.setState({ loggedIn: false })
+                    }} title="Log Out" />
                 </View>
-            </KeyboardAvoidingView>
-        );
+            )
+        }
     }
 }
 const styles = StyleSheet.create({
