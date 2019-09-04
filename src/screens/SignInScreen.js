@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Button, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, Button, KeyboardAvoidingView, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import config from '../../config'
@@ -14,6 +14,7 @@ export default class SignInScreen extends React.Component {
             email: "",
             password: "",
             hasError: false,
+            isLoading: false,
             errorMessage: ''
         };
 
@@ -39,6 +40,7 @@ export default class SignInScreen extends React.Component {
         this.props.navigation.navigate('App');
     }
     handleLogin = () => {
+        this.setState({ isLoading: true })
         const login = {
             user_name: this.state.email,
             password: this.state.password
@@ -69,6 +71,14 @@ export default class SignInScreen extends React.Component {
             });
     }
     render() {
+        let isLoading = <Text></Text>;
+        if (this.state.isLoading) {
+
+            isLoading = <View style={{ flex: 1, padding: 20 }}>
+                <ActivityIndicator />
+            </View>
+
+        }
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
                 <View style={styles.scrollView}>
@@ -76,6 +86,7 @@ export default class SignInScreen extends React.Component {
                         {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
                         <EmailInput handleEmailChange={this.handleEmailChange} />
                         <PasswordInput handlePasswordChange={this.handlePasswordChange} />
+                        {isLoading}
                         <Button
                             title="Login"
                             onPress={this.handleLogin}
