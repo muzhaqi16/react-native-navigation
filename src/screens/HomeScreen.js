@@ -87,7 +87,6 @@ export default class HomeScreen extends React.Component {
                     isLoading: false,
                     groceries: res,
                 });
-                console.log(res)
             })
             .catch((error) => {
                 this.setState({
