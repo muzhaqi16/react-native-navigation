@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import LogoTitle from '../components/LogoTitle';
+//import LogoTitle from '../components/LogoTitle';
 import MenuButton from '../components/MenuButton';
+import AddButton from '../components/AddButton';
 import DeleteButton from '../components/DeleteButton';
 import config from '../../config'
 
@@ -20,6 +21,7 @@ export default class HomeScreen extends React.Component {
             //         title="Info"
             //     />
             // ),
+            headerRight: <AddButton onPress={() => navigation.navigate('Add')} />,
             title: 'Home',
         }
     };
@@ -116,7 +118,7 @@ export default class HomeScreen extends React.Component {
                         <View style={styles.viewCard}>
                             <Image style={styles.roundImage} source={{ uri: "https://spoonacular.com/cdn/ingredients_100x100/" + item.image, width: 100, height: 100 }} />
                             <View style={{ flex: 1, flexDirection: 'column' }}>
-                                <Text> {item.name}</Text>
+                                <Text style={{ textTransform: 'capitalize' }}> {item.name}</Text>
                                 <Text> {item.category}</Text>
                                 <Text> {item.quantity} {item.unit}, Expires {months[new Date(item.expiry_date).getMonth()]} {new Date(item.expiry_date).getDate()}   </Text>
                             </View>
