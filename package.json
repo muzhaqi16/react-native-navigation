@@ -11,6 +11,8 @@
     "@react-native-community/async-storage": "github:react-native-community/async-storage",
     "react": "16.8.6",
     "react-native": "0.60.5",
+    "react-native-elements": "^1.2.0",
+    "react-native-fbsdk": "^1.0.3",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-reanimated": "^1.2.0",
     "react-native-vector-icons": "^6.6.0",

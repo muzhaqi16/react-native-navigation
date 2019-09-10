@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, Button, KeyboardAvoidingView, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { Keyboard, Text, View, TextInput, TouchableWithoutFeedback, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { Button } from 'react-native-elements';
+import FBLoginButton from '../components/FBLoginButton';
 import AsyncStorage from '@react-native-community/async-storage';
+import styles from "./SignInStyle";
 
+const appId = "906979363006410"
 import config from '../../config'
-
-import EmailInput from '../components/inputs/EmailInput';
-import PasswordInput from '../components/inputs/PasswordInput';
 
 export default class SignInScreen extends React.Component {
     constructor(props) {
@@ -40,6 +41,8 @@ export default class SignInScreen extends React.Component {
         this.props.navigation.navigate('App');
     }
     handleLogin = () => {
+        if (this.state.email == '' || this.state.password.length < 6 || this.state.email < 5 || this.state.password == '')
+            return
         this.setState({ isLoading: true })
         const login = {
             user_name: this.state.email,
@@ -74,43 +77,30 @@ export default class SignInScreen extends React.Component {
         let isLoading = <Text></Text>;
         if (this.state.isLoading) {
 
-            isLoading = <View style={{ flex: 1, padding: 20 }}>
+            isLoading = <View style={{}}>
                 <ActivityIndicator />
             </View>
 
         }
         return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
-                <View style={styles.scrollView}>
-                    <ScrollView style={styles.scrollViewWrapper}>
-                        {this.state.hasError ? <Text>{this.state.errorMessage}</Text> : <Text></Text>}
-                        <EmailInput handleEmailChange={this.handleEmailChange} />
-                        <PasswordInput handlePasswordChange={this.handlePasswordChange} />
-                        {isLoading}
-                        <Button
-                            title="Login"
-                            onPress={this.handleLogin}
-                            style={{
-                                color: 'white', flex: 1
-                            }} />
-                    </ScrollView>
-
-                </View>
-            </KeyboardAvoidingView>
+            <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.loginScreenContainer}>
+                        <View style={styles.loginFormView}>
+                            <Text style={styles.logoText}>Sous Chef</Text>
+                            <TextInput placeholder="Username" onChangeText={this.handleEmailChange} placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
+                            <TextInput placeholder="Password" onChangeText={this.handlePasswordChange} placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
+                            {isLoading}
+                            <Button
+                                buttonStyle={styles.loginButton}
+                                onPress={() => this.handleLogin()}
+                                title="Login" />
+                            <Text style={styles.or}>OR</Text>
+                            <FBLoginButton />
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView >
         );
     }
-}
-const styles = StyleSheet.create({
-    wrapper: {
-        display: "flex",
-        flex: 1,
-        justifyContent: "flex-start"
-    },
-    scrollView: {
-        flex: 1,
-    },
-    scrollViewWrapper: {
-        marginTop: 70,
-        flex: 1
-    }
-});
+};
