@@ -31,6 +31,7 @@ export default class HomeScreen extends React.Component {
         this.state = {
             isLoading: true,
             authToken: "",
+            email: "",
             hasError: false,
             errorMessage: 'There was an error with the app'
         }
@@ -38,14 +39,16 @@ export default class HomeScreen extends React.Component {
     getData = async () => {
         try {
             const value = await AsyncStorage.getItem('@authToken')
+            const email = await AsyncStorage.getItem('@FB_email')
             if (value !== null) {
-                this.setState({ authToken: value })
+                this.setState({ authToken: value, email: email })
                 this.fetchData();
             }
         } catch (e) {
             // error reading value
             alert('There was an error')
         }
+
     }
     componentDidMount() {
         this.getData();

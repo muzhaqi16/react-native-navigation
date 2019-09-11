@@ -73,6 +73,9 @@ export default class SignInScreen extends React.Component {
                 })
             });
     }
+    handleFbLogin = () => {
+        this.props.navigation.navigate('App');
+    }
     render() {
         let isLoading = <Text></Text>;
         if (this.state.isLoading) {
@@ -96,7 +99,7 @@ export default class SignInScreen extends React.Component {
                                 onPress={() => this.handleLogin()}
                                 title="Login" />
                             <Text style={styles.or}>OR</Text>
-                            <FBLoginButton />
+                            <FBLoginButton handleLogin={() => this.handleFbLogin()} />
                         </View>
                     </View>
                 </TouchableWithoutFeedback>

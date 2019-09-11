@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, ScrollView, Button } from 'react-native'
+import { StyleSheet, ScrollView, Button, Image } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view';
 import { DrawerNavigatorItems } from 'react-navigation-drawer';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -9,11 +9,14 @@ const DrawerContainer = props => (
             style={styles.container}
             forceInset={{ top: 'always', horizontal: 'never' }}
         >
+
             <DrawerNavigatorItems {...props} />
             <Button title="Log Out" onPress={() => this.logOut(props)} />
         </SafeAreaView>
     </ScrollView>
 );
+
+
 logOut = async (props) => {
     try {
         await AsyncStorage.removeItem('@authToken')
